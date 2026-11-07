@@ -1,4 +1,4 @@
-# VirtualTeacher (EduGPT) — Autonomous Multi-Agent Pedagogical Framework 🤖📚
+# VirtualTeacher (EduGPT):  Autonomous Multi-Agent Pedagogical Framework 🤖📚
 
 <div align="center">
 
