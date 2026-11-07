@@ -1,67 +1,132 @@
-# :book: EduGPT - Your AI Instructor
+# VirtualTeacher (EduGPT) — Autonomous Multi-Agent Pedagogical Framework 🤖📚
 
-This repo demonstrates an implementation of an AI Instructor using LLMs.
+<div align="center">
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)](https://python.org)
+[![LangChain](https://img.shields.io/badge/LangChain-Orchestration-1C3C3C?style=for-the-badge)](https://langchain.com)
+[![CAMEL](https://img.shields.io/badge/Architecture-CAMEL%20Role--Playing-red?style=for-the-badge)](#camel-multi-agent-role-playing-architecture)
+[![Research](https://img.shields.io/badge/Status-Foundational%20Research%20Archive-brightgreen?style=for-the-badge)](#research-significance--evolution)
 
-I leverage the [`langchain`](https://github.com/hwchase17/langchain) library in this implementation and are inspired by [CAMEL](https://github.com/camel-ai/camel) architecture .
+**An autonomous multi-agent pedagogical system leveraging CAMEL (Communicative Agents for "Mind" Exploration) role-playing architecture and LangChain state loops to synthesize interactive curricula.**
 
-## Overview
+[Abstract](#abstract) • [Multi-Agent Architecture](#camel-multi-agent-role-playing-architecture) • [Mathematical Formalism](#mathematical-formalism) • [Evolution to Astra Edu](#research-significance--evolution) • [Setup](#getting-started)
 
-The AI Instructor project aims to revolutionize the way people learn by harnessing the power of artificial intelligence. It introduces a unique approach to education, where two role-playing agents engage in a discussion and design a syllabus based on the user's desired learning outcomes. Another agent, acting as the instructor, then teaches the user according to the syllabus.
+</div>
 
-## Key features
+---
 
-- Role-playing Agent Discussion: Two role-playing AI agents engage in a conversation and collaboratively design a syllabus based on the user's learning goals.
-- Adaptive Instruction: The instructor agent adapts the teaching style and pace to match the user's preferences and learning abilities.
-- Dynamic Learning Environment: The AI Instructor provides an interactive and engaging learning environment powered by advanced natural language processing and machine learning techniques.
+## 🔬 Abstract
 
+Standard conversational AI tutors suffer from reactive passivity: they wait for student prompts rather than proactively diagnosing conceptual bottlenecks. **VirtualTeacher** models instructional interaction as an **autonomous communicative dialogue between two complementary agents**: an **Instructor Agent** (tasked with pedagogical scaffolding, Socratic questioning, and curriculum decomposition) and a **Student Agent** (tasked with articulating misconceptions, seeking clarification, and testing heuristic hypotheses).
 
-## Architecture
+By leveraging the **CAMEL role-playing framework** and **LangChain agent loops**, VirtualTeacher explores the emergent dynamics of collaborative cognitive task completion without human-in-the-loop steering.
 
-<img src="diagram.png"  width="1000" height="400">
+---
 
+## 🏛️ CAMEL Multi-Agent Role-Playing Architecture
 
-The process follows these main steps:
-- **Agent Initialization**: The AI agents are initialized with their extensive knowledge and capabilities in a specific domain.
+```
+                                  ┌────────────────────────┐
+                                  │   TASK SPECIFIER AGENT │
+                                  │ (Generates Root Topic) │
+                                  └───────────┬────────────┘
+                                              │ Inception Prompting
+                         ┌────────────────────┴────────────────────┐
+                         ▼                                         ▼
+            ┌────────────────────────┐                ┌────────────────────────┐
+            │    INSTRUCTOR AGENT    │                │     STUDENT AGENT      │
+            │   (Pedagogical Mentor) │                │  (Learner & Inquirer)  │
+            │                        │                │                        │
+            │ • Sets Sub-goals       │                │ • Probes Edge Cases    │
+            │ • Formulates Questions │                │ • Surfaces Confusions  │
+            │ • Evaluates Reasoning  │                │ • Proposes Solutions   │
+            └───────────┬────────────┘                └───────────▲────────────┘
+                        │                                         │
+                        │ Socratic Challenge / Guidance           │ Inquiries & Answers
+                        └────────────────────┬────────────────────┘
+                                             │
+                                             ▼
+                             ┌──────────────────────────────┐
+                             │    INTERACTIVE GRADIO HUD    │
+                             │  (Live Dialogue Telemetry)   │
+                             └──────────────────────────────┘
+```
 
-- **User Query Understanding**: When a user inputs their desired learning topics, the AI agents receive and understand it through the prepared prompt.
+---
 
-- **Agent Dialogue and Collaboration**: The two AI agents, taking on the roles of discussion partners, engage in a dialogue to design a syllabus. They employ their respective expertise and knowledge to engage in a collaborative discussion. This dialogue involves exchanging ideas and exploring related concepts.
+## 📐 Mathematical Formalism
 
-- **Syllabus Generation**: Through the conversation history of 2 agents, I will use a Large Language Model to generate a comprehensive syllabus that covers the user's desired topics. They prioritize and structure the content in a logical manner, ensuring a coherent progression of concepts and an organized learning experience for the user.
+Let $\mathcal{T}$ denote the target educational task or concept domain. The system initializes via an inception prompt producing specific role assignments for the Instructor Agent $\mathcal{A}_I$ and Student Agent $\mathcal{A}_S$:
 
-- **Instructor Agent Assignment**: Once the syllabus is created, a dedicated AI agent assumes the role of the instructor. It receives and adapts its approach to suit the syllabus.
+$$\mathcal{P}_I = \text{Prompt}(\mathcal{T}, \text{Role} = \text{Instructor}), \quad \mathcal{P}_S = \text{Prompt}(\mathcal{T}, \text{Role} = \text{Student})$$
 
-By leveraging the expertise of two AI agents and employing adaptive instruction techniques, the AI Instructor project aims to provide a personalized and dynamic learning environment. Users can benefit from the collaborative syllabus design process and the tailored instruction delivered by the dedicated instructor agent, resulting in an enhanced and effective learning experience.
+The autonomous dialogue unfolds over discrete turns $t \in [1, N]$:
 
-## Installation
+$$m_t^I = \mathcal{A}_I \left( \mathcal{H}_{<t}, \mathcal{P}_I \right)$$
 
-Make sure your have python 3.10+ and run this command to setup environment:
+$$m_{t+1}^S = \mathcal{A}_S \left( \mathcal{H}_{\le t}, \mathcal{P}_S \right)$$
 
-`make venv`
+Where:
+* $\mathcal{H}_t = (m_1^I, m_2^S, \dots, m_t^I)$ is the shared conversational history buffer.
+* The loop terminates when $\mathcal{A}_I$ issues a canonical verification token $\langle\text{TASK\_ACCOMPLISHED}\rangle$, indicating that the conceptual milestone has been rigorously mastered.
 
-Create `.env` file and put your Open AI Key there by specifying a line:
+---
 
-`OPENAI_API_KEY=sk-xxx`
+## 🧬 Research Significance & Evolution
 
-## Usage
+```
+[Late 2025: Foundational Agentic Exploration]
+   VirtualTeacher / EduGPT
+   • Explored CAMEL autonomous role-playing loops & LangChain state graphs.
+   • Finding: Multi-agent LLM dialogue produces rich explanations, but suffers from
+     non-deterministic curriculum drift and lack of provable mastery guarantees.
+                      │
+                      ▼ Architectural Insight
+[Late 2026: Deterministic Systems Evolution]
+   Astra Edu / Techgram Kernel
+   • Separated curriculum selection into a deterministic, zero-LLM belief state kernel.
+   • LLMs restricted strictly to generative synthesis, solving the stochastic drift problem.
+```
 
-To get a feel for a conversation with the AI Instructor agent, you can run:
+This research archive marks the empirical foundation that motivated the deterministic cognitive modeling engine implemented in [`astra-edu-techgram`](https://github.com/mdroushanalam-astra/astra-edu-techgram).
 
-`python src/run.py`
+---
 
-from your terminal. Then, open the link provided by Gradio.
+## 🛠️ Tech Stack & Dependencies
 
-To interact with this AI Instructor:
-- First, you need to input your interested topic in the tab *Input Your Information*.
-- Then, it will design a syllabus of that topic for you.
-- Finally, feel free to interact with your instructor, you can ask them to teach you from that syllabus.
+- **Language:** Python 3.10+
+- **Agent Orchestration:** LangChain (`langchain`)
+- **LLM Engine:** OpenAI API (`gpt-4` / `gpt-3.5-turbo`)
+- **Interactive UI:** Gradio (`gradio`)
+- **Tooling & Code Quality:** Flake8, Black, isort, pre-commit
 
-## Contact Us
+---
 
-For questions, you can [contact the repo author](mailto:mdroushanalam.ai@gmail.com).
+## 💻 Getting Started
 
+### Installation
+```bash
+# 1. Clone repository
+git clone https://github.com/mdroushanalam-astra/virtual-teacher.git
+cd virtual-teacher
 
-## Contributing
+# 2. Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: .\venv\Scripts\activate
 
-Contributions are highly encouraged!
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Set environment keys
+export OPENAI_API_KEY="your-api-key-here"
+
+# 5. Launch the multi-agent simulation
+python setup.py develop
+# Or run your agent entrypoint
+```
+
+---
+
+<div align="center">
+  <sub>Research conducted by <a href="https://github.com/mdroushanalam-astra">Md. Roushan Alam</a></sub>
+</div>
